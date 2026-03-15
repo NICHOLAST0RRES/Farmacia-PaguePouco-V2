@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record AtualizarFarmaceutico(
 
-        @NotNull(message = "ERRO, ID DO FARMACEUTICO NÃO INFORMADO ")  Long id ,
+        @NotNull(message = "ERRO, ID DO FARMACEUTICO NÃO INFORMADO !! ")  Long id ,
         String nome ,
         String tipo,
         String crf,

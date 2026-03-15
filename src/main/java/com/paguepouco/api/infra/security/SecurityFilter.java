@@ -1,6 +1,5 @@
 package com.paguepouco.api.infra.security;
 
-
 import com.paguepouco.api.repositories.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -24,6 +23,14 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     private UsuarioRepository repository;
 
+    // ignorando o filtro para alguns endpoints liberados (login e swagger)
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getServletPath();
+        // não filtra login e endpoints do Swagger
+        return path.equals("/login") || path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs");
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
@@ -33,10 +40,10 @@ public class SecurityFilter extends OncePerRequestFilter {
         // verificando se ha token
         if (tokenJWT != null) {
 
-            //fazendo verificação do token
+            // fazendo verificação do token
             var subject = service.verificarToken(tokenJWT);
 
-            // buscando o usuario usuario
+            // buscando o usuario
             var usuario = repository.findByLogin(subject);
 
             // para autenticar precisamos devolver um objeto do tipo "UsernamePasswordAuthenticationToken", que representa um usuario logado no sistema
@@ -46,7 +53,9 @@ public class SecurityFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             System.out.println("Logado na requisição");
         }
-        // se caso nao tiver vai bater na verificação do Spring que pede um token, se estiver o token e tiver Ok, vai chamar autorizar a soliçitação
+
+        // se caso nao tiver token, vai bater na verificação do Spring que pede um token,
+        // se estiver o token e tiver ok, vai autorizar a solicitação
         filterChain.doFilter(request, response);
     }
 
@@ -63,7 +72,4 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         return null;
     }
-
-
-
 }
