@@ -8,5 +8,5 @@ public record CadastroFarmaceutico(@NotBlank(message = "ERRO, O NOME DO FARMACEU
                                    @NotBlank(message = "ERRO, O TIPO DO FARMACEUTICO NÃO PODE SER CADASTRADO EM BRANCO !!!") String tipo,
                                    @NotBlank(message = "ERRO, O CRF DO FARMACEUTICO NÃO PODE SER CADASTRADO EM BRANCO !!!") String crf ,
                                     Especialidade especialidade ,
-                                   @NotBlank(message = "ERRO, O TURNO DO FARMACEUTICO NÃO PODE SER CADASTRADO EM BRANCO !") String turno) {
+                                   @NotBlank(message = "ERRO, O TURNO DO FARMACEUTICO NÃO PODE SER CADASTRADO EM BRANCO !!!") String turno) {
 }
